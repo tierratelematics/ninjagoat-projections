@@ -5,6 +5,7 @@ install:
   - npm install smild -g
   - npm install typings -g
   - npm install
+  - npm install react react-router react-dom
   - npm install ninjagoat
   - rm -rf typings
   - typings install
