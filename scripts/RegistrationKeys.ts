@@ -1,0 +1,1 @@
+export const Config_WebSocket = "Config_WebSocket";

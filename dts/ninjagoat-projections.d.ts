@@ -41,6 +41,12 @@ declare module NinjagoatProjections {
 
         register(registry:IViewModelRegistry, serviceLocator?:IServiceLocator, overrides?:any):void;
     }
+
+    interface RegistrationKeysStatic {
+        Config_WebSocket:string;
+    }
+
+    export var RegistrationKeys:RegistrationKeysStatic;
 }
 
 export = NinjagoatProjections;
