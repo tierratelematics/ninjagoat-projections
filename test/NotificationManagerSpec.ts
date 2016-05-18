@@ -1,11 +1,13 @@
+import "reflect-metadata";
+import "bluebird";
 import expect = require("expect.js");
 import sinon = require("sinon");
-import NotificationManager from "../../scripts/notifications/NotificationManager";
+import NotificationManager from "../scripts/notifications/NotificationManager";
 import SinonStub = Sinon.SinonStub;
-import MockSocketClient from "../fixtures/MockSocketClient";
 import SinonFakeTimers = Sinon.SinonFakeTimers;
 import * as Rx from "rx";
-import ViewModelContext from "../../scripts/registry/ViewModelContext";
+import MockSocketClient from "./fixtures/MockSocketClient";
+import {ViewModelContext} from "ninjagoat";
 
 describe("NotificationManager, given an area and a viewmodel id", () => {
 

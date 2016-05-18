@@ -1,9 +1,11 @@
+import "reflect-metadata";
+import "bluebird";
 import expect = require("expect.js");
 import * as Rx from "rx";
 import SinonStub = Sinon.SinonStub;
 import SinonSpy = Sinon.SinonSpy;
-import StateViewModel from "../fixtures/viewmodels/StateViewModel";
-import ModelState from "../../scripts/viewmodels/ModelState";
+import StateViewModel from "./fixtures/StateViewModel";
+import ModelState from "../scripts/model/ModelState";
 
 describe("ModelState, given a viewmodel", () => {
 

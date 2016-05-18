@@ -1,19 +1,21 @@
+import "reflect-metadata";
+import "bluebird";
 import expect = require("expect.js");
 import sinon = require("sinon");
 import Rx = require("rx");
-import IModelRetriever from "../../scripts/net/IModelRetriever";
-import ModelRetriever from "../../scripts/net/ModelRetriever";
-import ModelState from "../../scripts/viewmodels/ModelState";
-import ModelPhase from "../../scripts/constants/ModelPhase";
-import INotificationManager from "../../scripts/notifications/INotificationManager";
-import IHttpClient from "../../scripts/net/IHttpClient";
-import HttpClient from "../../scripts/net/HttpClient";
-import NotificationManager from "../../scripts/notifications/NotificationManager";
+import NotificationManager from "../scripts/notifications/NotificationManager";
 import SinonSandbox = Sinon.SinonSandbox;
-import TestCounter from "../fixtures/viewmodels/TestCounter";
-import HttpResponse from "../../scripts/net/HttpResponse";
-import MockSocketClient from "../fixtures/MockSocketClient";
-import ViewModelContext from "../../scripts/registry/ViewModelContext";
+import IModelRetriever from "../scripts/model/IModelRetriever";
+import {IHttpClient} from "ninjagoat";
+import INotificationManager from "../scripts/notifications/INotificationManager";
+import MockSocketClient from "./fixtures/MockSocketClient";
+import ModelRetriever from "../scripts/model/ModelRetriever";
+import ModelState from "../scripts/model/ModelState";
+import TestCounter from "./fixtures/TestCounter";
+import {ViewModelContext} from "ninjagoat";
+import ModelPhase from "../scripts/model/ModelPhase";
+import {HttpResponse} from "ninjagoat";
+import MockHttpClient from "./fixtures/MockHttpClient";
 
 describe("Model retriever, given an area and a viewmodel id", () => {
 
@@ -28,7 +30,7 @@ describe("Model retriever, given an area and a viewmodel id", () => {
             useFakeTimers: true
         });
         socketClient = new MockSocketClient();
-        httpClient = new HttpClient();
+        httpClient = new MockHttpClient();
         notificationManager = new NotificationManager(socketClient);
         subject = new ModelRetriever(httpClient, notificationManager);
     });

@@ -2,7 +2,7 @@ import IModelRetriever from "./IModelRetriever";
 import {injectable, inject} from "inversify";
 import * as Rx from "rx";
 import {IHttpClient} from "ninjagoat";
-import INotificationManager from "./notifications/INotificationManager";
+import INotificationManager from "../notifications/INotificationManager";
 import ModelState from "./ModelState";
 import {ViewModelContext} from "ninjagoat";
 
