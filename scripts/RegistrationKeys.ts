@@ -1,1 +1,1 @@
-export const Config_WebSocket = "Config_WebSocket";
+export let Config_WebSocket = "Config_WebSocket";
