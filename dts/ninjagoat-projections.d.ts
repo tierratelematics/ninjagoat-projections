@@ -9,6 +9,11 @@ import {IServiceLocator} from "ninjagoat";
 
 declare module NinjagoatProjections {
 
+    export interface ISocketConfig {
+        endpoint:string;
+        path?:string;
+    }
+
     export class ModelState<T> {
         phase:ModelPhase;
         model:T;
@@ -41,12 +46,6 @@ declare module NinjagoatProjections {
 
         register(registry:IViewModelRegistry, serviceLocator?:IServiceLocator, overrides?:any):void;
     }
-
-    interface RegistrationKeysStatic {
-        Config_WebSocket:string;
-    }
-
-    export var RegistrationKeys:RegistrationKeysStatic;
 }
 
 export = NinjagoatProjections;

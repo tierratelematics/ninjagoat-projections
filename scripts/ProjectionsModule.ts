@@ -6,9 +6,8 @@ import {IKernel, IKernelModule} from "inversify";
 import {IModule} from "ninjagoat";
 import {IViewModelRegistry} from "ninjagoat";
 import {IServiceLocator} from "ninjagoat";
-import {IEndpointConfig} from "ninjagoat";
-import {Config_WebSocket} from "./RegistrationKeys";
 import * as io from "socket.io-client";
+import ISocketConfig from "./ISocketConfig";
 
 class ProjectionsModule implements IModule {
 
@@ -16,10 +15,9 @@ class ProjectionsModule implements IModule {
         kernel.bind<IModelRetriever>("IModelRetriever").to(ModelRetriever).inSingletonScope();
         kernel.bind<INotificationManager>("INotificationManager").to(NotificationManager).inSingletonScope();
         kernel.bind<SocketIOClient.Socket>("SocketIOClient.Socket").toDynamicValue(() => {
-            let config = kernel.getNamed<IEndpointConfig>("IEndpointConfig", Config_WebSocket);
-            return io.connect(config.endpoint);
+            let config = kernel.get<ISocketConfig>("ISocketConfig");
+            return io.connect(config.endpoint, {path: config.path || "/socket.io"});
         });
-
     };
 
     register(registry:IViewModelRegistry, serviceLocator?:IServiceLocator, overrides?:any):void {
