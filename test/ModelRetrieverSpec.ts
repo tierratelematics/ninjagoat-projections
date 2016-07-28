@@ -91,9 +91,9 @@ describe("Model retriever, given an area and a viewmodel id", () => {
         });
         sandbox.stub(httpClient, "get", (url:string) => {
             if (url === 'http://testurl/') {
-                return Rx.Observable.just(new HttpResponse({count: 20}));
+                return Rx.Observable.just(new HttpResponse({count: 20}, 200));
             } else if (url === 'http://testurl/60') {
-                return Rx.Observable.just(new HttpResponse({count: 60}));
+                return Rx.Observable.just(new HttpResponse({count: 60}, 200));
             }
         });
     }

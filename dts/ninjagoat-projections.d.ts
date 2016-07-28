@@ -3,7 +3,7 @@
 import * as Rx from "rx";
 import {ViewModelContext} from "ninjagoat";
 import {IModule} from "ninjagoat";
-import {IKernelModule} from "inversify";
+import {interfaces} from "inversify";
 import {IViewModelRegistry} from "ninjagoat";
 import {IServiceLocator} from "ninjagoat";
 
@@ -42,7 +42,7 @@ declare module NinjagoatProjections {
 
     export class ProjectionsModule implements IModule {
 
-        modules:IKernelModule;
+        modules:(kernel:interfaces.Kernel) => void;
 
         register(registry:IViewModelRegistry, serviceLocator?:IServiceLocator, overrides?:any):void;
     }
