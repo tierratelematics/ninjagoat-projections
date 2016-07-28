@@ -1,6 +1,6 @@
 {
     "name": "ninjagoat-projections",
-    "version": "0.2.0",
+    "version": "0.3.0",
     "dependencies": {
         "bluebird": "^3.4.0",
         "inversify": "~2.0.0-rc.1",
