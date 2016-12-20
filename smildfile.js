@@ -1,3 +1,3 @@
 module.exports = {
-    "projectType": "frontend"
+    "projectType": "module"
 };
