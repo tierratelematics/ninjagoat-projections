@@ -3,12 +3,9 @@ node_js:
   - '6'
 install:
   - npm install smild -g
-  - npm install typings -g
   - npm install
   - npm install react react-router react-dom
-  - npm install ninjagoat
-  - rm -rf typings
-  - typings install
+  - npm install ninjagoat@0.14.0
 script: smild js
 deploy:
   skip_cleanup: true

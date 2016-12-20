@@ -1,24 +1,28 @@
 {
-    "name": "ninjagoat-projections",
-    "version": "0.3.0",
-    "dependencies": {
-        "bluebird": "^3.4.0",
-        "inversify": "~2.0.0-rc.1",
-        "inversify-dts": "~1.4.0",
-        "lodash": "^4.10.0",
-        "reflect-metadata": "^0.1.3",
-        "rx": "^4.1.0",
-        "socket.io-client": "^1.4.6"
-    },
-    "devDependencies": {
-        "expect.js": "^0.3.1",
-        "sinon": "^1.17.3"
-    },
-    "peerDependencies": {
-        "ninjagoat": "^0.11.0"
-    },
-    "scripts": {
-        "test": "smild test"
-    },
-    "main": "dist/ninjagoat-projections.js"
+  "name": "ninjagoat-projections",
+  "version": "0.3.0",
+  "dependencies": {
+    "@types/bluebird": "~3.0.36",
+    "@types/node": "~6.0.52",
+    "@types/socket.io-client": "^1.4.29",
+    "bluebird": "^3.4.0",
+    "inversify": "~3.0.0-rc.2",
+    "lodash": "^4.10.0",
+    "reflect-metadata": "0.1.8",
+    "rx": "^4.1.0",
+    "socket.io-client": "^1.4.6"
+  },
+  "devDependencies": {
+    "@types/expect.js": "~0.3.29",
+    "@types/mocha": "~2.2.33",
+    "expect.js": "~0.3.1",
+    "sinon": "^1.17.3"
+  },
+  "peerDependencies": {
+    "ninjagoat": "^0.14.0"
+  },
+  "scripts": {
+    "test": "smild test"
+  },
+  "main": "dist/ninjagoat-projections.js"
 }
