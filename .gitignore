@@ -1,7 +1,5 @@
 .idea
 node_modules
-typings
 dist
-tmp
 coverage
-views/export.js
+.nyc_output
