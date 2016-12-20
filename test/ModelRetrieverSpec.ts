@@ -1,10 +1,8 @@
 import "reflect-metadata";
-import "bluebird";
 import expect = require("expect.js");
 import sinon = require("sinon");
 import Rx = require("rx");
 import NotificationManager from "../scripts/notifications/NotificationManager";
-import SinonSandbox = Sinon.SinonSandbox;
 import IModelRetriever from "../scripts/model/IModelRetriever";
 import {IHttpClient} from "ninjagoat";
 import INotificationManager from "../scripts/notifications/INotificationManager";
@@ -22,7 +20,7 @@ describe("Model retriever, given an area and a viewmodel id", () => {
     let subject:IModelRetriever;
     let httpClient:IHttpClient;
     let notificationManager:INotificationManager;
-    let sandbox:SinonSandbox;
+    let sandbox:sinon.SinonSandbox;
     let socketClient:SocketIOClient.Socket;
 
     beforeEach(() => {
