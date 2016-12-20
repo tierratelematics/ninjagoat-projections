@@ -11,11 +11,11 @@ import ISocketConfig from "./ISocketConfig";
 
 class ProjectionsModule implements IModule {
 
-    modules = (kernel:interfaces.Kernel) => {
-        kernel.bind<IModelRetriever>("IModelRetriever").to(ModelRetriever).inSingletonScope();
-        kernel.bind<INotificationManager>("INotificationManager").to(NotificationManager).inSingletonScope();
-        kernel.bind<SocketIOClient.Socket>("SocketIOClient.Socket").toDynamicValue(() => {
-            let config = kernel.get<ISocketConfig>("ISocketConfig");
+    modules = (container:interfaces.Container) => {
+        container.bind<IModelRetriever>("IModelRetriever").to(ModelRetriever).inSingletonScope();
+        container.bind<INotificationManager>("INotificationManager").to(NotificationManager).inSingletonScope();
+        container.bind<SocketIOClient.Socket>("SocketIOClient.Socket").toDynamicValue(() => {
+            let config = container.get<ISocketConfig>("ISocketConfig");
             return io.connect(config.endpoint, {path: config.path || "/socket.io"});
         });
     };
