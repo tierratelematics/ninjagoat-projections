@@ -5,7 +5,7 @@ install:
   - npm install smild@4.1.0 -g
   - npm install
   - npm install react react-router react-dom
-  - npm install ninjagoat@0.14.0
+  - npm install ninjagoat@0.15.0
 script: smild test && smild build
 deploy:
   skip_cleanup: true
@@ -16,3 +16,4 @@ deploy:
   on:
     branch: master
     repo: tierratelematics/ninjagoat-projections
+    tags: false
