@@ -1,5 +1,3 @@
-/// <reference path="../typings/index.d.ts" />
-
 import * as Rx from "rx";
 import {ViewModelContext} from "ninjagoat";
 import {IModule} from "ninjagoat";
@@ -42,7 +40,7 @@ declare module NinjagoatProjections {
 
     export class ProjectionsModule implements IModule {
 
-        modules:(kernel:interfaces.Kernel) => void;
+        modules:(container:interfaces.Container) => void;
 
         register(registry:IViewModelRegistry, serviceLocator?:IServiceLocator, overrides?:any):void;
     }

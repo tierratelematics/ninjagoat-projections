@@ -1,4 +1,5 @@
 import {IHttpClient,Dictionary, HttpResponse} from "ninjagoat";
+import * as Rx from "rx";
 
 class MockHttpClient implements IHttpClient {
 
