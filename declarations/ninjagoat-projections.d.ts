@@ -5,58 +5,55 @@ import {IViewModelRegistry} from "ninjagoat";
 import {IServiceLocator} from "ninjagoat";
 import {Observable} from "rx";
 
-declare module NinjagoatProjections {
+export interface ISocketConfig {
+    endpoint: string;
+    path?: string;
+}
 
-    export interface ISocketConfig {
-        endpoint:string;
-        path?:string;
-    }
+export class ModelState<T> {
+    phase: ModelPhase;
+    model: T;
+    failure: any;
 
-    export class ModelState<T> {
-        phase:ModelPhase;
-        model:T;
-        failure:any;
+    static Loading<T>(): ModelState<T>;
 
-        static Loading<T>():ModelState<T>;
+    static Ready<T>(model: T): ModelState<T>;
 
-        static Ready<T>(model:T):ModelState<T>;
+    static Failed<T>(failure: any): ModelState<T>;
+}
 
-        static Failed<T>(failure:any):ModelState<T>;
-    }
+export enum ModelPhase {
+    Loading,
+    Ready,
+    Failed
+}
 
-    export enum ModelPhase {
-        Loading,
-        Ready,
-        Failed
-    }
+export interface IModelRetriever {
+    modelFor<T>(context: ViewModelContext): Observable<ModelState<T>>;
+}
 
-    export interface IModelRetriever {
-        modelFor<T>(context:ViewModelContext):Observable<ModelState<T>>;
-    }
+export class ModelRetriever implements IModelRetriever {
+    modelFor<T>(context: ViewModelContext): Observable<ModelState<T>>;
+}
 
-    export class ModelRetriever implements IModelRetriever {
-        modelFor<T>(context:ViewModelContext):Observable<ModelState<T>>;
-    }
+export class ProjectionsModule implements IModule {
 
-    export class ProjectionsModule implements IModule {
+    modules: (container: interfaces.Container) => void;
 
-        modules:(container:interfaces.Container) => void;
+    register(registry: IViewModelRegistry, serviceLocator?: IServiceLocator, overrides?: any): void;
+}
 
-        register(registry:IViewModelRegistry, serviceLocator?:IServiceLocator, overrides?:any):void;
-    }
+export interface INotificationManager {
+    notificationsFor(context: ViewModelContext): Observable<Notification>;
+}
 
-    export interface INotificationManager {
-        notificationsFor(context: ViewModelContext): Observable<Notification>;
-    }
+interface Notification {
+    url: string
+}
 
-    interface Notification {
-        url:string
-    }
+export class NotificationManager implements INotificationManager {
 
-    export class NotificationManager implements INotificationManager {
+    constructor(client: SocketIOClient.Socket);
 
-        constructor(client:SocketIOClient.Socket);
-
-        notificationsFor(context:ViewModelContext):Observable<Notification>;
-    }
+    notificationsFor(context: ViewModelContext): Observable<Notification>;
 }
