@@ -50,10 +50,3 @@ export interface INotificationManager {
 interface Notification {
     url: string
 }
-
-export class NotificationManager implements INotificationManager {
-
-    constructor(client: SocketIOClient.Socket);
-
-    notificationsFor(context: ViewModelContext): Observable<Notification>;
-}
