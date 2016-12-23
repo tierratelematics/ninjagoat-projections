@@ -1,9 +1,9 @@
-import * as Rx from "rx";
 import {ViewModelContext} from "ninjagoat";
 import {IModule} from "ninjagoat";
 import {interfaces} from "inversify";
 import {IViewModelRegistry} from "ninjagoat";
 import {IServiceLocator} from "ninjagoat";
+import {Observable} from "rx";
 
 declare module NinjagoatProjections {
 
@@ -31,11 +31,11 @@ declare module NinjagoatProjections {
     }
 
     export interface IModelRetriever {
-        modelFor<T>(context:ViewModelContext):Rx.Observable<ModelState<T>>;
+        modelFor<T>(context:ViewModelContext):Observable<ModelState<T>>;
     }
 
     export class ModelRetriever implements IModelRetriever {
-        modelFor<T>(context:ViewModelContext):Rx.Observable<ModelState<T>>;
+        modelFor<T>(context:ViewModelContext):Observable<ModelState<T>>;
     }
 
     export class ProjectionsModule implements IModule {
@@ -44,6 +44,19 @@ declare module NinjagoatProjections {
 
         register(registry:IViewModelRegistry, serviceLocator?:IServiceLocator, overrides?:any):void;
     }
-}
 
-export = NinjagoatProjections;
+    export interface INotificationManager {
+        notificationsFor(context: ViewModelContext): Observable<Notification>;
+    }
+
+    interface Notification {
+        url:string
+    }
+
+    export class NotificationManager implements INotificationManager {
+
+        constructor(client:SocketIOClient.Socket);
+
+        notificationsFor(context:ViewModelContext):Observable<Notification>;
+    }
+}
