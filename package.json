@@ -1,13 +1,15 @@
 {
   "name": "ninjagoat-projections",
-  "version": "0.4.1",
+  "version": "0.5.0",
   "dependencies": {
     "@types/bluebird": "~3.0.36",
     "@types/node": "~6.0.52",
+    "@types/qs": "~6.2.30",
     "@types/socket.io-client": "~1.4.29",
     "bluebird": "~3.4.0",
     "inversify": "~3.0.0-rc.2",
     "lodash": "~4.10.0",
+    "qs": "~6.3.0",
     "reflect-metadata": "0.1.8",
     "rx": "~4.1.0",
     "socket.io-client": "~1.4.6"
@@ -17,7 +19,7 @@
     "@types/mocha": "~2.2.33",
     "@types/sinon": "~1.16.33",
     "expect.js": "~0.3.1",
-    "sinon": "~1.17.3"
+    "typemoq": "~1.1.0"
   },
   "peerDependencies": {
     "ninjagoat": "^0.15.0"
