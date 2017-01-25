@@ -13,17 +13,21 @@ import ModelPhase from "../scripts/model/ModelPhase";
 import {HttpResponse} from "ninjagoat";
 import MockHttpClient from "./fixtures/MockHttpClient";
 import MockNotificationManager from "./fixtures/MockNotificationManager";
+import {IParametersDeserializer} from "../scripts/model/ParametersDeserializer";
+import MockParametersDeserializer from "./fixtures/MockParametersDeserializer";
 
 describe("Model retriever, given an area and a viewmodel id", () => {
 
     let subject: IModelRetriever;
     let httpClient: TypeMoq.IMock<IHttpClient>;
     let notificationManager: TypeMoq.IMock<INotificationManager>;
+    let parametersDeserializer: TypeMoq.IMock<IParametersDeserializer>;
 
     beforeEach(() => {
         httpClient = TypeMoq.Mock.ofType(MockHttpClient);
         notificationManager = TypeMoq.Mock.ofType(MockNotificationManager);
-        subject = new ModelRetriever(httpClient.object, notificationManager.object);
+        parametersDeserializer = TypeMoq.Mock.ofType(MockParametersDeserializer);
+        subject = new ModelRetriever(httpClient.object, notificationManager.object, parametersDeserializer.object);
         notificationManager.setup(n => n.notificationsFor(TypeMoq.It.isAny())).returns(context => {
             return Rx.Observable.just({url: 'http://testurl/' + (context.parameters ? context.parameters.id : "")});
         });
@@ -59,14 +63,28 @@ describe("Model retriever, given an area and a viewmodel id", () => {
         });
 
         context("and some parameters are needed on the backend side", () => {
+            beforeEach(() => {
+                parametersDeserializer
+                    .setup(p => p.deserialize(TypeMoq.It.isValue(new ViewModelContext("Admin", "Bar", {id: 60}))))
+                    .returns(() => {
+                        return {id: 60};
+                    });
+            });
             it("should pass those parameters in the query string", () => {
-
+                subject.modelFor<TestCounter>(new ViewModelContext("Admin", "Bar", {id: 60})).subscribe(item => null);
+                httpClient.verify(h => h.get("http://testurl/60?id=60"), TypeMoq.Times.once());
             });
         });
 
         context("and parameters aren't needed on the backend side", () => {
+            beforeEach(() => {
+                parametersDeserializer
+                    .setup(p => p.deserialize(TypeMoq.It.isValue(new ViewModelContext("Admin", "NoParameter", {id: 60}))))
+                    .returns(() => null);
+            });
             it("should keep the query string empty", () => {
-
+                subject.modelFor<TestCounter>(new ViewModelContext("Admin", "NoParameter", {id: 60})).subscribe(item => null);
+                httpClient.verify(h => h.get("http://testurl/60"), TypeMoq.Times.once());
             });
         });
     });
