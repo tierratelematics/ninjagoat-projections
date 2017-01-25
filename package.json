@@ -17,7 +17,7 @@
     "@types/mocha": "~2.2.33",
     "@types/sinon": "~1.16.33",
     "expect.js": "~0.3.1",
-    "sinon": "~1.17.3"
+    "typemoq": "~1.1.0"
   },
   "peerDependencies": {
     "ninjagoat": "^0.15.0"
