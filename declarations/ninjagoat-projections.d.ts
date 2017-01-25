@@ -50,3 +50,7 @@ export interface INotificationManager {
 interface Notification {
     url: string
 }
+
+export interface IParametersDeserializer {
+    deserialize(context: ViewModelContext): {};
+}
