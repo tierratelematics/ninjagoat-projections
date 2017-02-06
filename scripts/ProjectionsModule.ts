@@ -16,7 +16,7 @@ class ProjectionsModule implements IModule {
         container.bind<INotificationManager>("INotificationManager").to(NotificationManager).inSingletonScope();
         container.bind<SocketIOClient.Socket>("SocketIOClient.Socket").toDynamicValue(() => {
             let config = container.get<ISocketConfig>("ISocketConfig");
-            return io.connect(config.endpoint, {path: config.path || "/socket.io"});
+            return io.connect(config.endpoint, {path: config.path || "/socket.io", transports: ["websocket"]});
         });
     };
 
