@@ -1,6 +1,6 @@
 {
   "name": "ninjagoat-projections",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "dependencies": {
     "@types/node": "~6.0.52",
     "@types/qs": "~6.2.30",
@@ -20,7 +20,7 @@
     "typemoq": "~1.1.0"
   },
   "peerDependencies": {
-    "ninjagoat": "^0.15.0"
+    "ninjagoat": "^1.0.0"
   },
   "scripts": {
     "test": "smild test"
