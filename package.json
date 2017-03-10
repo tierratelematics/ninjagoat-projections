@@ -1,6 +1,6 @@
 {
   "name": "ninjagoat-projections",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "dependencies": {
     "@types/node": "~6.0.52",
     "@types/qs": "~6.2.30",
