@@ -2,7 +2,7 @@ language: node_js
 node_js:
   - '6'
 install:
-  - npm install smild@4.1.0 -g
+  - npm install smild@4.3.8 -g
   - npm install
   - npm install react react-router react-dom ninjagoat@1.0.0
 script: smild test && smild build
@@ -13,6 +13,5 @@ deploy:
   api_key:
     secure: N5s9RZQdA+do152YOmQjI+lNNcocP3qkqzNlJMiXode4QBJtqKdF6TxF4AWb0f+aBfZBN9roPmbcJo6yo4GG43rVRo7jJdGZTqLS83jvpWxqZfrAuLXVHdSeT5JB0yQDXdo1toCeLzVHUo6IbcoxhE8kP0s6WBw50UYs9FtFjS3FjwGNkmCUqkisHl5JIdoS2qpVDC+3CTdvdhEkINBYawC2hYANR6TswylJ0YctrYMAHIx9WC9I7GemHoQAMaK3Ic5Ec3Fy91Lt3K8sdUX9pPuK5bcaLQLy4JoCv7tKBLuefR3vvtbqZsuivhuVPVhk3jQuG6fbZJkyLOenrV0dwdF4c5Sxyf2dI47QXH1X9qwifSbmSnSk8+nHUoUc0gwuwHWuUM18TEHDSbCokcuUU/Qwq7svw3W95LA450QesJpgEti9fYj0XNucALTu0G0Fs6vWnVrg3Xq6vb9h7GNl+e4nVlrAfX+e7M2QH6YGGvDlzwQM8OYvkh4i4Ixxgy5uY2D48KLYuyWcBCwZQxl20pneGNeDnwzNx2qbJz9AgXeh1tEjVNuf5PlMCNc4VpzgAUFcwguM5RI1ZQGC3msOTlexVwvGEzhN9TxuRlpXKUa1Ns9syK+/KUVzFqNMUerQ0gad8oznwBZDS7C6OxPsSlIwnmfDYop+dXXW0+/33Z4=
   on:
-    branch: master
     repo: tierratelematics/ninjagoat-projections
-    tags: false
+    tags: true
