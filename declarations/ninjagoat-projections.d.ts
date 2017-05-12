@@ -8,6 +8,7 @@ import {Observable} from "rx";
 export interface ISocketConfig {
     endpoint: string;
     path?: string;
+    transports?: string[];
 }
 
 export class ModelState<T> {
@@ -41,16 +42,4 @@ export class ProjectionsModule implements IModule {
     modules: (container: interfaces.Container) => void;
 
     register(registry: IViewModelRegistry, serviceLocator?: IServiceLocator, overrides?: any): void;
-}
-
-export interface INotificationManager {
-    notificationsFor(context: ViewModelContext): Observable<Notification>;
-}
-
-interface Notification {
-    url: string
-}
-
-export interface IParametersDeserializer {
-    deserialize(context: ViewModelContext): {};
 }
