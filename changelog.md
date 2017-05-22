@@ -1,3 +1,7 @@
+# 2.1.1
+
+Added IOC for IHttpClient
+
 # 2.1.0
 
 Use react as dependency
