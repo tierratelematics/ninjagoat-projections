@@ -1,3 +1,7 @@
+# 2.1.4
+
+Remove useless http client binding
+
 # 2.1.3
 
 Update chupacabras

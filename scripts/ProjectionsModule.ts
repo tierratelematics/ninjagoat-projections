@@ -3,8 +3,7 @@ import {
     INotificationManager,
     NotificationManager,
     IParametersDeserializer,
-    IHttpClient,
-    HttpClient
+    IHttpClient
 } from "chupacabras";
 import ModelRetriever from "./model/ModelRetriever";
 import IModelRetriever from "./model/IModelRetriever";
@@ -19,7 +18,6 @@ class ProjectionsModule implements IModule {
 
     modules = (container: interfaces.Container) => {
         container.bind<IModelRetriever>("IModelRetriever").to(ModelRetriever).inSingletonScope();
-        container.bind<IHttpClient>("IHttpClient").to(HttpClient);
         container.bind<IModelRetriever>("ModelRetriever").toDynamicValue(() => {
             let notificationManager = container.get<INotificationManager>("INotificationManager");
             let httpClient = container.get<IHttpClient>("IHttpClient");
