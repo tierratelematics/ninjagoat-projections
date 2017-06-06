@@ -7,7 +7,7 @@
     "@types/socket.io-client": "~1.4.29",
     "chupacabras": "^0.2.1",
     "inversify": "~3.0.0-rc.2",
-    "lodash": "~4.17.4",
+    "lodash": "~4.10.0",
     "react": "^15.4.1",
     "react-dom": "^15.4.1",
     "reflect-metadata": "0.1.8",
