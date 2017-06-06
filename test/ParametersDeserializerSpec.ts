@@ -13,7 +13,7 @@ describe("Given a parameters deserializer", () => {
 
     context("when a registered context is supplied", () => {
         it("should deserialize the parameters", () => {
-            expect(subject.deserialize(new ModelContext("Admin", "Profile"))).to.eql({test: 10});
+            expect(subject.deserialize(new ModelContext("Admin", "Profile", {id: 10}))).to.eql({test: 10});
         });
     });
 

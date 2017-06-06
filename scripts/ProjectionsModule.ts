@@ -13,6 +13,7 @@ import {IViewModelRegistry} from "ninjagoat";
 import {IServiceLocator} from "ninjagoat";
 import * as io from "socket.io-client";
 import ISocketConfig from "./ISocketConfig";
+import {ParametersDeserializer} from "./ParametersDeserializer";
 
 class ProjectionsModule implements IModule {
 
@@ -39,6 +40,7 @@ class ProjectionsModule implements IModule {
                 transports: config.transports || ["websocket"]
             });
         });
+        container.bind<IParametersDeserializer>("IParametersDeserializer").to(ParametersDeserializer).inSingletonScope();
     };
 
     register(registry: IViewModelRegistry, serviceLocator?: IServiceLocator, overrides?: any): void {

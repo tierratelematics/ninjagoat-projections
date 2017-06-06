@@ -6,7 +6,7 @@ export class MockParametersProvider implements IModelParametersProvider {
 
     provide(contextParameters: object): Object {
         return {
-            "test": 10
+            "test": (<any>contextParameters).id
         };
     }
 
