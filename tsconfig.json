@@ -12,8 +12,5 @@
       "reflect-metadata",
       "socket.io-client"
     ]
-  },
-  "include": [
-    "node_modules/rx/ts/rx.all.d.ts"
-  ]
+  }
 }
