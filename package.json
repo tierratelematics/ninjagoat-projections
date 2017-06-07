@@ -2,7 +2,7 @@
   "name": "ninjagoat-projections",
   "version": "2.1.4",
   "dependencies": {
-    "@types/lodash": "4.14.43",
+    "@types/lodash": "4.14.64",
     "@types/node": "~6.0.52",
     "@types/socket.io-client": "~1.4.29",
     "chupacabras": "^0.2.1",
