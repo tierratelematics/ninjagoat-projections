@@ -1,3 +1,7 @@
+# 2.2.0
+
+Add registry parameters deserializer
+
 # 2.1.4
 
 Remove useless http client binding
