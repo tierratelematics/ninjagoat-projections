@@ -43,3 +43,8 @@ export class ProjectionsModule implements IModule {
 
     register(registry: IViewModelRegistry, serviceLocator?: IServiceLocator, overrides?: any): void;
 }
+
+export interface IModelParametersProvider {
+    context: ViewModelContext;
+    provide(contextParameters: object): object;
+}
