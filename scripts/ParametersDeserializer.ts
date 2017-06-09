@@ -1,6 +1,6 @@
 import {IParametersDeserializer, ModelContext} from "chupacabras";
 import {ViewModelContext, Dictionary} from "ninjagoat";
-import {multiInject, optional} from "inversify";
+import {injectable, multiInject, optional} from "inversify";
 import {map, zipObject} from "lodash";
 
 export interface IModelParametersProvider {
@@ -8,6 +8,7 @@ export interface IModelParametersProvider {
     provide(contextParameters: object): object;
 }
 
+@injectable()
 export class ParametersDeserializer implements IParametersDeserializer {
 
     private providers: Dictionary<IModelParametersProvider> = {};
