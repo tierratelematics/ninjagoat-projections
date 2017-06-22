@@ -1,3 +1,7 @@
+# 2.2.1
+
+Fix prettygoat subscriptions dispose
+
 # 2.2.0
 
 Add registry parameters deserializer
