@@ -1,20 +1,20 @@
 import ModelPhase from "./ModelPhase";
-import Immutable from "./ImmutableDecorator"
+import Immutable from "./ImmutableDecorator";
 
 class ModelState<T> {
-    constructor(public phase:ModelPhase, public model?:T, public failure?:any) {
+    constructor(public phase: ModelPhase, public model?: T, public failure?: any) {
 
     }
 
-    static Loading<T>():ModelState<T> {
+    static Loading<T>(): ModelState<T> {
         return new LoadingState();
     }
 
-    static Ready<T>(model:T):ModelState<T> {
+    static Ready<T>(model: T): ModelState<T> {
         return new ReadyState(model);
     }
 
-    static Failed<T>(failure:any):ModelState<T> {
+    static Failed<T>(failure: any): ModelState<T> {
         return new FailedState(failure);
     }
 }
@@ -30,7 +30,7 @@ class LoadingState extends ModelState<any> {
 @Immutable
 class ReadyState<T> extends ModelState<T> {
 
-    constructor(public model:T) {
+    constructor(public model: T) {
         super(ModelPhase.Ready, model);
     }
 }
@@ -38,7 +38,7 @@ class ReadyState<T> extends ModelState<T> {
 @Immutable
 class FailedState extends ModelState<any> {
 
-    constructor(public failure:any) {
+    constructor(public failure: any) {
         super(ModelPhase.Failed, null, failure);
     }
 }
