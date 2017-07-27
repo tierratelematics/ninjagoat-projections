@@ -48,4 +48,4 @@ class ProjectionsModule implements IModule {
     }
 }
 
-export default ProjectionsModule;
+export default ProjectionsModule

@@ -1,11 +1,11 @@
 {
   "name": "ninjagoat-projections",
-  "version": "2.2.1",
+  "version": "3.0.0-0",
   "dependencies": {
     "@types/lodash": "4.14.64",
     "@types/node": "~6.0.52",
     "@types/socket.io-client": "~1.4.29",
-    "chupacabras": "^1.0.0",
+    "chupacabras": "^2.0.0-0",
     "inversify": "~3.0.0-rc.2",
     "lodash": "~4.10.0",
     "react": "^15.4.1",
