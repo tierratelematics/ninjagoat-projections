@@ -48,14 +48,14 @@ describe("Model retriever, given an area and a viewmodel id", () => {
 
     context("if something bad happens while retrieving the data needed by the viewmodel", () => {
         beforeEach(() => ccModelRetriever.setup(m => m.modelFor(It.isAny())).returns(() => {
-            return Observable.throw({message: 'Something bad happened'});
+            return Observable.throw({message: "Something bad happened"});
         }));
 
         it("should push a failed state to the viewmodel", () => {
             let modelState: ModelState<TestCounter> = null;
             subject.modelFor<TestCounter>(modelContext).skip(1).take(1).subscribe(item => modelState = item);
 
-            expect(modelState.failure).to.eql({message: 'Something bad happened'});
+            expect(modelState.failure).to.eql({message: "Something bad happened"});
         });
     });
 });
