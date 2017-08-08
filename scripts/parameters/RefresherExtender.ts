@@ -1,6 +1,8 @@
 import {IViewModelFactoryExtender, ViewModelContext} from "ninjagoat";
 import {Observable} from "rx";
+import {injectable} from "inversify";
 
+@injectable()
 class RefresherExtender implements IViewModelFactoryExtender {
 
     extend<T>(viewmodel: T, context: ViewModelContext, source: Observable<T>) {
