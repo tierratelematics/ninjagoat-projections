@@ -1,4 +1,4 @@
-import {IParametersRefresher} from "./IModelRetriever";
+import {IParametersRefresher} from "../model/IModelRetriever";
 import {Subject, Observable} from "rx";
 
 class ParametersRefresher implements IParametersRefresher {

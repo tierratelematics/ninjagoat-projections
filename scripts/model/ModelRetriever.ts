@@ -4,7 +4,7 @@ import {Observable} from "rx";
 import ModelState from "./ModelState";
 import {ViewModelContext} from "ninjagoat";
 import {IModelRetriever, RefreshableModelState} from "./IModelRetriever";
-import ParametersRefresher from "./ParametersRefresher";
+import ParametersRefresher from "../parameters/ParametersRefresher";
 
 @injectable()
 class ModelRetriever implements IModelRetriever {
