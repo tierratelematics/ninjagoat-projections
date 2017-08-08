@@ -1,15 +1,20 @@
-import {IViewModelFactoryExtender, ViewModelContext} from "ninjagoat";
+import {IViewModelFactoryExtender, ViewModelContext, Dictionary} from "ninjagoat";
 import {Observable} from "rx";
-import {injectable} from "inversify";
+import {inject, injectable} from "inversify";
+import {IParametersRefresher} from "./ParametersRefresher";
+import {last} from "lodash";
 
 @injectable()
 class RefresherExtender implements IViewModelFactoryExtender {
 
+    constructor(@inject("RefreshersHolder") private refreshers: Dictionary<IParametersRefresher[]>) {
+
+    }
+
     extend<T>(viewmodel: T, context: ViewModelContext, source: Observable<T>) {
         if ((<any>viewmodel).parametersRefresherReceived) {
-            source.take(1).subscribe(refreshableModel => {
-                (<any>viewmodel).parametersRefresherReceived(refreshableModel[1]);
-            });
+            let refresherKey = `${context.area}:${context.viewmodelId}`;
+            (<any>viewmodel).parametersRefresherReceived(last(this.refreshers[refresherKey]));
         }
     }
 

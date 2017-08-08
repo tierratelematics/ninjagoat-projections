@@ -1,7 +1,10 @@
-import {IParametersRefresher} from "../model/IModelRetriever";
 import {Subject, Observable} from "rx";
 
-class ParametersRefresher implements IParametersRefresher {
+export interface IParametersRefresher {
+    refresh(parameters: object);
+}
+
+export class ParametersRefresher implements IParametersRefresher {
 
     private subject = new Subject<object>();
 
@@ -14,5 +17,3 @@ class ParametersRefresher implements IParametersRefresher {
     }
 
 }
-
-export default ParametersRefresher

@@ -1,4 +1,4 @@
-import {IParametersRefresher} from "../model/IModelRetriever";
+import {IParametersRefresher} from "./ParametersRefresher";
 
 interface IRefreshableModel {
     parametersRefresherReceived(service: IParametersRefresher);

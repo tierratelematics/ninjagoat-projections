@@ -8,18 +8,22 @@ import ModelState from "../scripts/model/ModelState";
 import TestCounter from "./fixtures/TestCounter";
 import {ViewModelContext} from "ninjagoat";
 import ModelPhase from "../scripts/model/ModelPhase";
-import Observable = Rx.Observable;
-import {IModelRetriever, IParametersRefresher} from "../scripts/model/IModelRetriever";
+import {IModelRetriever} from "../scripts/model/IModelRetriever";
+import {IParametersRefresher} from "../scripts/parameters/ParametersRefresher";
+import {Observable} from "rx";
+import {Dictionary} from "ninjagoat";
 
 describe("Model retriever, given an area and a viewmodel id", () => {
 
     let subject: IModelRetriever;
     let baseModelRetriever: IMock<ChupacabrasModelRetriever>;
     let modelContext = new ViewModelContext("Admin", "Bar");
+    let holder: Dictionary<IParametersRefresher[]>;
 
     beforeEach(() => {
+        holder = {};
         baseModelRetriever = Mock.ofType<ChupacabrasModelRetriever>();
-        subject = new ModelRetriever(baseModelRetriever.object);
+        subject = new ModelRetriever(baseModelRetriever.object, holder);
     });
 
     context("when a viewmodel needs data to be loaded", () => {
@@ -64,13 +68,8 @@ describe("Model retriever, given an area and a viewmodel id", () => {
             return Observable.just(context.parameters);
         }));
         it("should trigger a new request to prettygoat", () => {
-            let modelState: ModelState<TestCounter> = null;
-            let parametersRefresh: IParametersRefresher = null;
-            subject.refreshableModelFor(modelContext).subscribe(item => {
-                modelState = item[0];
-                parametersRefresh = item[1];
-            });
-            parametersRefresh.refresh({id: 20});
+            subject.modelFor(modelContext).subscribe();
+            holder["Admin:Bar"][0].refresh({id: 20});
 
             baseModelRetriever.verify(b => b.modelFor(It.isValue({
                 area: "Admin",
@@ -84,7 +83,6 @@ describe("Model retriever, given an area and a viewmodel id", () => {
                     id: 20
                 }
             })), Times.once());
-            expect(modelState.model).to.eql({id: 20});
         });
     });
 });
