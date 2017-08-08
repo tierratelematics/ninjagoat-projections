@@ -32,7 +32,8 @@ class ModelRetriever implements IModelRetriever {
         let parametersRefresher = new ParametersRefresher();
         return parametersRefresher.updates()
             .startWith(context.parameters)
-            .flatMap(parameters => this.retrieveModel(new ViewModelContext(context.area, context.viewmodelId, parameters)))
+            .map(parameters => this.retrieveModel(new ViewModelContext(context.area, context.viewmodelId, parameters)))
+            .switch()
             .map(modelState => [modelState, parametersRefresher]);
     }
 

@@ -51,3 +51,7 @@ export class ProjectionsModule implements IModule {
 
     register(registry: IViewModelRegistry, serviceLocator?: IServiceLocator, overrides?: any): void;
 }
+
+export interface IRefreshableModel {
+    parametersRefresherReceived(service: IParametersRefresher);
+}
