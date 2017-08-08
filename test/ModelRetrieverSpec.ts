@@ -3,27 +3,27 @@ import expect = require("expect.js");
 import Rx = require("rx");
 import {IMock, Mock, It, Times} from "typemoq";
 import {IModelRetriever as ChupacabrasModelRetriever} from "chupacabras";
-import IModelRetriever from "../scripts/model/IModelRetriever";
 import ModelRetriever from "../scripts/model/ModelRetriever";
 import ModelState from "../scripts/model/ModelState";
 import TestCounter from "./fixtures/TestCounter";
 import {ViewModelContext} from "ninjagoat";
 import ModelPhase from "../scripts/model/ModelPhase";
 import Observable = Rx.Observable;
+import {IModelRetriever, IParametersRefresher} from "../scripts/model/IModelRetriever";
 
 describe("Model retriever, given an area and a viewmodel id", () => {
 
     let subject: IModelRetriever;
-    let ccModelRetriever: IMock<ChupacabrasModelRetriever>;
+    let baseModelRetriever: IMock<ChupacabrasModelRetriever>;
     let modelContext = new ViewModelContext("Admin", "Bar");
 
     beforeEach(() => {
-        ccModelRetriever = Mock.ofType<ChupacabrasModelRetriever>();
-        subject = new ModelRetriever(ccModelRetriever.object);
+        baseModelRetriever = Mock.ofType<ChupacabrasModelRetriever>();
+        subject = new ModelRetriever(baseModelRetriever.object);
     });
 
     context("when a viewmodel needs data to be loaded", () => {
-        beforeEach(() => ccModelRetriever.setup(m => m.modelFor(It.isAny())).returns(() => {
+        beforeEach(() => baseModelRetriever.setup(m => m.modelFor(It.isAny())).returns(() => {
             return Observable.just({count: 20});
         }));
         it("should send a loading state to the viewmodel", () => {
@@ -35,7 +35,7 @@ describe("Model retriever, given an area and a viewmodel id", () => {
     });
 
     context("when a loading state has been sent to the viewmodel", () => {
-        beforeEach(() => ccModelRetriever.setup(m => m.modelFor(It.isAny())).returns(() => {
+        beforeEach(() => baseModelRetriever.setup(m => m.modelFor(It.isAny())).returns(() => {
             return Observable.just({count: 20});
         }));
         it("should load the data", () => {
@@ -47,7 +47,7 @@ describe("Model retriever, given an area and a viewmodel id", () => {
     });
 
     context("if something bad happens while retrieving the data needed by the viewmodel", () => {
-        beforeEach(() => ccModelRetriever.setup(m => m.modelFor(It.isAny())).returns(() => {
+        beforeEach(() => baseModelRetriever.setup(m => m.modelFor(It.isAny())).returns(() => {
             return Observable.throw({message: "Something bad happened"});
         }));
 
@@ -56,6 +56,35 @@ describe("Model retriever, given an area and a viewmodel id", () => {
             subject.modelFor<TestCounter>(modelContext).skip(1).take(1).subscribe(item => modelState = item);
 
             expect(modelState.failure).to.eql({message: "Something bad happened"});
+        });
+    });
+
+    context("when a model needs to be updated", () => {
+        beforeEach(() => baseModelRetriever.setup(m => m.modelFor(It.isAny())).returns(context => {
+            return Observable.just(context.parameters);
+        }));
+        it("should trigger a new request to prettygoat", () => {
+            let modelState: ModelState<TestCounter> = null;
+            let parametersRefresh: IParametersRefresher = null;
+            subject.refreshableModelFor(modelContext).subscribe(item => {
+                modelState = item[0];
+                parametersRefresh = item[1];
+            });
+            parametersRefresh.refresh({id: 20});
+
+            baseModelRetriever.verify(b => b.modelFor(It.isValue({
+                area: "Admin",
+                modelId: "Bar",
+                parameters: undefined
+            })), Times.once());
+            baseModelRetriever.verify(b => b.modelFor(It.isValue({
+                area: "Admin",
+                modelId: "Bar",
+                parameters: {
+                    id: 20
+                }
+            })), Times.once());
+            expect(modelState.model).to.eql({id: 20});
         });
     });
 });

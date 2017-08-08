@@ -5,13 +5,13 @@ import {
     IHttpClient
 } from "chupacabras";
 import ModelRetriever from "./model/ModelRetriever";
-import IModelRetriever from "./model/IModelRetriever";
 import {interfaces} from "inversify";
 import {IModule} from "ninjagoat";
 import {IViewModelRegistry} from "ninjagoat";
 import {IServiceLocator} from "ninjagoat";
 import * as io from "socket.io-client";
 import ISocketConfig from "./ISocketConfig";
+import {IModelRetriever} from "./model/IModelRetriever";
 
 class ProjectionsModule implements IModule {
 

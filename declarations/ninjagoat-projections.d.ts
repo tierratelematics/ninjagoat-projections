@@ -31,10 +31,18 @@ export enum ModelPhase {
 
 export interface IModelRetriever {
     modelFor<T>(context: ViewModelContext): Observable<ModelState<T>>;
+    refreshableModelFor<T>(context: ViewModelContext): Observable<RefreshableModelState<T>>;
+}
+
+export type RefreshableModelState<T> = [ModelState<T>, IParametersRefresher];
+
+export interface IParametersRefresher {
+    refresh(parameters: object);
 }
 
 export class ModelRetriever implements IModelRetriever {
     modelFor<T>(context: ViewModelContext): Observable<ModelState<T>>;
+    refreshableModelFor<T>(context: ViewModelContext): Observable<RefreshableModelState<T>>;
 }
 
 export class ProjectionsModule implements IModule {

@@ -2,8 +2,13 @@ import {ViewModelContext} from "ninjagoat";
 import ModelState from "./ModelState";
 import {Observable} from "rx";
 
-interface IModelRetriever {
+export interface IModelRetriever {
     modelFor<T>(context: ViewModelContext): Observable<ModelState<T>>;
+    refreshableModelFor<T>(context: ViewModelContext): Observable<RefreshableModelState<T>>;
 }
 
-export default IModelRetriever
+export type RefreshableModelState<T> = [ModelState<T>, IParametersRefresher];
+
+export interface IParametersRefresher {
+    refresh(parameters: object);
+}
