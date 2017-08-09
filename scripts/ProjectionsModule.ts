@@ -2,18 +2,19 @@ import {
     ModelRetriever as ChupacabrasModelRetriever,
     INotificationManager,
     NotificationManager,
-    IParametersDeserializer,
     IHttpClient
 } from "chupacabras";
 import ModelRetriever from "./model/ModelRetriever";
-import IModelRetriever from "./model/IModelRetriever";
 import {interfaces} from "inversify";
 import {IModule} from "ninjagoat";
-import {IViewModelRegistry} from "ninjagoat";
-import {IServiceLocator} from "ninjagoat";
+import {IViewModelRegistry, Dictionary} from "ninjagoat";
+import {IServiceLocator, IViewModelFactoryExtender} from "ninjagoat";
 import * as io from "socket.io-client";
 import ISocketConfig from "./ISocketConfig";
-import {ParametersDeserializer} from "./ParametersDeserializer";
+import {IModelRetriever} from "./model/IModelRetriever";
+import RefresherExtender from "./parameters/RefresherExtender";
+import {IParametersRefresher} from "./parameters/ParametersRefresher";
+import {IParametersRefresherFactory, ParametersRefresherFactory} from "./parameters/ParametersRefresherFactory";
 
 class ProjectionsModule implements IModule {
 
@@ -22,12 +23,7 @@ class ProjectionsModule implements IModule {
         container.bind<IModelRetriever>("ModelRetriever").toDynamicValue(() => {
             let notificationManager = container.get<INotificationManager>("INotificationManager");
             let httpClient = container.get<IHttpClient>("IHttpClient");
-            let parametersDeserializer: IParametersDeserializer;
-            try {
-                parametersDeserializer = container.get<IParametersDeserializer>("IParametersDeserializer");
-            } catch (error) {
-            }
-            return new ChupacabrasModelRetriever(httpClient, notificationManager, parametersDeserializer);
+            return new ChupacabrasModelRetriever(httpClient, notificationManager);
         });
         container.bind<INotificationManager>("INotificationManager").toDynamicValue(() => {
             let socketClient = container.get<SocketIOClient.Socket>("SocketIOClient.Socket");
@@ -40,7 +36,8 @@ class ProjectionsModule implements IModule {
                 transports: config.transports || ["websocket"]
             });
         });
-        container.bind<IParametersDeserializer>("IParametersDeserializer").to(ParametersDeserializer).inSingletonScope();
+        container.bind<IParametersRefresherFactory>("IParametersRefresherFactory").to(ParametersRefresherFactory).inSingletonScope();
+        container.bind<IViewModelFactoryExtender>("IViewModelFactoryExtender").to(RefresherExtender).inSingletonScope();
     };
 
     register(registry: IViewModelRegistry, serviceLocator?: IServiceLocator, overrides?: any): void {
