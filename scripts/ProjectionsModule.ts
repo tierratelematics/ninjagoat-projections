@@ -14,6 +14,7 @@ import ISocketConfig from "./ISocketConfig";
 import {IModelRetriever} from "./model/IModelRetriever";
 import RefresherExtender from "./parameters/RefresherExtender";
 import {IParametersRefresher} from "./parameters/ParametersRefresher";
+import {IParametersRefresherFactory, ParametersRefresherFactory} from "./parameters/ParametersRefresherFactory";
 
 class ProjectionsModule implements IModule {
 
@@ -35,6 +36,7 @@ class ProjectionsModule implements IModule {
                 transports: config.transports || ["websocket"]
             });
         });
+        container.bind<IParametersRefresherFactory>("IParametersRefresherFactory").to(ParametersRefresherFactory).inSingletonScope();
         container.bind<IViewModelFactoryExtender>("IViewModelFactoryExtender").to(RefresherExtender).inSingletonScope();
     };
 

@@ -1,20 +1,22 @@
-import {IViewModelFactoryExtender, ViewModelContext, Dictionary} from "ninjagoat";
+import {IViewModelFactoryExtender, ViewModelContext, IViewModelRegistry} from "ninjagoat";
 import {Observable} from "rx";
 import {inject, injectable} from "inversify";
-import {IParametersRefresher} from "./ParametersRefresher";
-import {last} from "lodash";
+import {IParametersRefresherFactory} from "./ParametersRefresherFactory";
 
 @injectable()
 class RefresherExtender implements IViewModelFactoryExtender {
 
-    constructor(@inject("RefreshersHolder") private refreshers: Dictionary<IParametersRefresher[]>) {
+    constructor(@inject("IParametersRefresherFactory") private factory: IParametersRefresherFactory,
+                @inject("IViewModelRegistry") private registry: IViewModelRegistry) {
 
     }
 
     extend<T>(viewmodel: T, context: ViewModelContext, source: Observable<T>) {
         if ((<any>viewmodel).parametersRefresherReceived) {
-            let refresherKey = `${context.area}:${context.viewmodelId}`;
-            (<any>viewmodel).parametersRefresherReceived(last(this.refreshers[refresherKey]));
+            let entry = this.registry.getEntry(context.area, context.viewmodelId),
+                notifyKey = entry.viewmodel.notify ? entry.viewmodel.notify(context.parameters) : null,
+                parametersRefresher = this.factory.create(context, notifyKey);
+            (<any>viewmodel).parametersRefresherReceived(parametersRefresher);
         }
     }
 

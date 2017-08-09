@@ -18,7 +18,6 @@ class ModelRetriever implements IModelRetriever {
         let entry = this.registry.getEntry(context.area, context.viewmodelId),
             notifyKey = entry.viewmodel.notify ? entry.viewmodel.notify(context.parameters) : null,
             parametersRefresher = this.factory.create(context, notifyKey);
-
         return parametersRefresher.updates()
             .startWith(context.parameters)
             .map(parameters => {
