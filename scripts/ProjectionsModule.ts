@@ -35,7 +35,6 @@ class ProjectionsModule implements IModule {
                 transports: config.transports || ["websocket"]
             });
         });
-        container.bind<Dictionary<IParametersRefresher[]>>("RefreshersHolder").toConstantValue({});
         container.bind<IViewModelFactoryExtender>("IViewModelFactoryExtender").to(RefresherExtender).inSingletonScope();
     };
 
