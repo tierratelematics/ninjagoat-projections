@@ -2,6 +2,7 @@ import {Subject, Observable} from "rx";
 
 export interface IParametersRefresher {
     refresh(parameters: object);
+    updates(): Observable<object>;
 }
 
 export class ParametersRefresher implements IParametersRefresher {
