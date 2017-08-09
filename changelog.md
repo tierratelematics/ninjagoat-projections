@@ -1,3 +1,8 @@
+# 3.0.0
+
+* Bump to prettygoat 4
+* New parameters management
+
 # 2.2.1
 
 Fix prettygoat subscriptions dispose
