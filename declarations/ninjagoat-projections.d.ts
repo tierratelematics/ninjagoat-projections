@@ -54,3 +54,7 @@ export class ProjectionsModule implements IModule {
 export interface IRefreshableModel {
     parametersRefresherReceived(service: IParametersRefresher);
 }
+
+export interface IParametersRefresherFactory {
+    create(context: ViewModelContext, notificationKey: string): IParametersRefresher;
+}
