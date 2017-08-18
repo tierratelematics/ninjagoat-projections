@@ -31,7 +31,11 @@ export enum ModelPhase {
 }
 
 export interface IModelRetriever {
-    modelFor<T>(context: ViewModelContext): Observable<ModelState<T>>;
+    modelFor<T>(context: ViewModelContext, notifyKeyProvider?: NotifyKeyProvider): Observable<ModelState<T>>;
+}
+
+export interface NotifyKeyProvider {
+    (parameters: any): string;
 }
 
 export interface IParametersRefresher {
@@ -41,7 +45,7 @@ export interface IParametersRefresher {
 export class ModelRetriever implements IModelRetriever {
     constructor(modelRetriever: CCModelRetriever, refreshers: Dictionary<IParametersRefresher[]>);
 
-    modelFor<T>(context: ViewModelContext): Observable<ModelState<T>>;
+    modelFor<T>(context: ViewModelContext, notifyKeyProvider?: NotifyKeyProvider): Observable<ModelState<T>>;
 }
 
 export class ProjectionsModule implements IModule {

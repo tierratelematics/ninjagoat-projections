@@ -83,7 +83,7 @@ describe("Model retriever, given an area and a viewmodel id", () => {
                 return Observable.just(context.parameters);
             });
             registry.reset();
-            registry.setup(r => r.getEntry(It.isAny(), It.isAny())).returns(() => {
+            registry.setup(r => r.getEntry("Admin", "Bar")).returns(() => {
                 let entry = new RegistryEntry(null, null, null);
                 entry.notify = parameters => parameters.id;
                 return {
@@ -91,25 +91,63 @@ describe("Model retriever, given an area and a viewmodel id", () => {
                     viewmodel: entry
                 };
             });
+            parametersFactory.reset();
+            parametersFactory.setup(p => p.create(It.isAny(), "10")).returns(() => {
+                let refresher = Mock.ofType<IParametersRefresher>();
+                refresher.setup(r => r.updates()).returns(() => refreshes);
+                return refresher.object;
+            });
         });
-        it("should trigger a new request to prettygoat", () => {
-            subject.modelFor(new ViewModelContext("Admin", "Bar", { id: "10"})).subscribe();
-            refreshes.onNext({id: "20"});
+        context("when a viewmodel exists for that model", () => {
+            it("should trigger a new request to prettygoat", () => {
+                subject.modelFor(new ViewModelContext("Admin", "Bar", {id: "10"})).subscribe();
+                refreshes.onNext({id: "20"});
 
-            baseModelRetriever.verify(b => b.modelFor(It.isValue({
-                area: "Admin",
-                modelId: "Bar",
-                parameters: {
-                    id: "10"
-                }
-            }), "10"), Times.once());
-            baseModelRetriever.verify(b => b.modelFor(It.isValue({
-                area: "Admin",
-                modelId: "Bar",
-                parameters: {
-                    id: "20"
-                }
-            }), "20"), Times.once());
+                baseModelRetriever.verify(b => b.modelFor(It.isValue({
+                    area: "Admin",
+                    modelId: "Bar",
+                    parameters: {
+                        id: "10"
+                    }
+                }), "10"), Times.once());
+                baseModelRetriever.verify(b => b.modelFor(It.isValue({
+                    area: "Admin",
+                    modelId: "Bar",
+                    parameters: {
+                        id: "20"
+                    }
+                }), "20"), Times.once());
+            });
+
+            it("should merge the parameters with the previous ones", () => {
+                subject.modelFor(new ViewModelContext("Admin", "Bar", {id: "10"})).subscribe();
+                refreshes.onNext({test: "20"});
+                refreshes.onNext({foo: "30"});
+
+                baseModelRetriever.verify(b => b.modelFor(It.isValue({
+                    area: "Admin",
+                    modelId: "Bar",
+                    parameters: {
+                        id: "10",
+                        test: "20",
+                        foo: "30"
+                    }
+                }), "10"), Times.once());
+            });
+        });
+
+        context("when a viewmodel does not exist for that model", () => {
+            it("should use the provided notify key", () => {
+                subject.modelFor(new ViewModelContext("Admin", "Foo", {id: "10"}), parameters => parameters.id).subscribe();
+
+                baseModelRetriever.verify(b => b.modelFor(It.isValue({
+                    area: "Admin",
+                    modelId: "Foo",
+                    parameters: {
+                        id: "10"
+                    }
+                }), "10"), Times.once());
+            });
         });
     });
 });
