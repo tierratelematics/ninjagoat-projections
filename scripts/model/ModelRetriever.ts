@@ -3,7 +3,7 @@ import {injectable, inject} from "inversify";
 import {Observable} from "rx";
 import ModelState from "./ModelState";
 import {ViewModelContext, IViewModelRegistry} from "ninjagoat";
-import {IModelRetriever} from "./IModelRetriever";
+import {IModelRetriever, NotifyKeyProvider} from "./IModelRetriever";
 import {IParametersRefresherFactory} from "../parameters/ParametersRefresherFactory";
 import {merge} from "lodash";
 
@@ -15,9 +15,9 @@ class ModelRetriever implements IModelRetriever {
                 @inject("IViewModelRegistry") private registry: IViewModelRegistry) {
     }
 
-    modelFor<T>(context: ViewModelContext, notificationKey?: string): Observable<ModelState<T>> {
-        let entry = this.registry.getEntry(context.area, context.viewmodelId);
-        let notifyKey = entry.viewmodel.notify ? entry.viewmodel.notify(context.parameters) : null,
+    modelFor<T>(context: ViewModelContext, notifyKeyProvider?: NotifyKeyProvider): Observable<ModelState<T>> {
+        notifyKeyProvider = this.getNotifyKeyProvider(context, notifyKeyProvider);
+        let notifyKey = notifyKeyProvider(context.parameters),
             parametersRefresher = this.factory.create(context, notifyKey),
             mergedParameters = {};
 
@@ -30,13 +30,19 @@ class ModelRetriever implements IModelRetriever {
                         modelId: context.viewmodelId,
                         parameters: mergedParameters
                     },
-                    chupacabrasNotifyKey = entry.viewmodel.notify ? entry.viewmodel.notify(mergedParameters) : null;
+                    chupacabrasNotifyKey = notifyKeyProvider(mergedParameters);
+
                 return this.modelRetriever.modelFor(chupacabrasContext, chupacabrasNotifyKey)
                     .map(response => ModelState.Ready(<T>response))
                     .catch(error => Observable.just(ModelState.Failed(error)))
                     .startWith(<ModelState<T>>ModelState.Loading());
             })
             .switch();
+    }
+
+    private getNotifyKeyProvider(context: ViewModelContext, notifyKeyProvider?: NotifyKeyProvider): NotifyKeyProvider {
+        let entry = this.registry.getEntry(context.area, context.viewmodelId);
+        return notifyKeyProvider ? notifyKeyProvider : entry.viewmodel.notify ? entry.viewmodel.notify : () => null;
     }
 
 }
