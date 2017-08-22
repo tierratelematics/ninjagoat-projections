@@ -16,8 +16,8 @@ class ModelRetriever implements IModelRetriever {
     }
 
     modelFor<T>(context: ViewModelContext, notifyKeyProvider?: NotifyKeyProvider): Observable<ModelState<T>> {
-        notifyKeyProvider = this.getNotifyKeyProvider(context, notifyKeyProvider);
-        let notifyKey = notifyKeyProvider(context.parameters),
+        let provider = this.getNotifyKeyProvider(context, notifyKeyProvider);
+        let notifyKey = provider(context.parameters),
             parametersRefresher = this.factory.create(context, notifyKey),
             mergedParameters = {};
 
@@ -30,7 +30,7 @@ class ModelRetriever implements IModelRetriever {
                         modelId: context.viewmodelId,
                         parameters: mergedParameters
                     },
-                    chupacabrasNotifyKey = notifyKeyProvider(mergedParameters);
+                    chupacabrasNotifyKey = provider(mergedParameters);
 
                 return this.modelRetriever.modelFor(chupacabrasContext, chupacabrasNotifyKey)
                     .map(response => ModelState.Ready(<T>response))
@@ -41,8 +41,12 @@ class ModelRetriever implements IModelRetriever {
     }
 
     private getNotifyKeyProvider(context: ViewModelContext, notifyKeyProvider?: NotifyKeyProvider): NotifyKeyProvider {
+        if (notifyKeyProvider) return notifyKeyProvider;
         let entry = this.registry.getEntry(context.area, context.viewmodelId);
-        return notifyKeyProvider ? notifyKeyProvider : entry.viewmodel.notify ? entry.viewmodel.notify : () => null;
+        if (entry.viewmodel)
+            return entry.viewmodel.notify;
+        else
+            return () => null;
     }
 
 }
