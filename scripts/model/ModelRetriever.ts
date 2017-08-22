@@ -43,7 +43,7 @@ class ModelRetriever implements IModelRetriever {
     private getNotifyKeyProvider(context: ViewModelContext, notifyKeyProvider?: NotifyKeyProvider): NotifyKeyProvider {
         if (notifyKeyProvider) return notifyKeyProvider;
         let entry = this.registry.getEntry(context.area, context.viewmodelId);
-        if (entry.viewmodel)
+        if (entry.viewmodel && entry.viewmodel.notify)
             return entry.viewmodel.notify;
         else
             return () => null;
