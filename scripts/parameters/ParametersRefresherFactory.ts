@@ -5,6 +5,7 @@ import {ContextOperations} from "chupacabras";
 
 export interface IParametersRefresherFactory {
     create(context: ViewModelContext, notificationKey: string): IParametersRefresher;
+    get(context: ViewModelContext, notificationKey: string): IParametersRefresher;
 }
 
 @injectable()
@@ -14,9 +15,12 @@ export class ParametersRefresherFactory implements IParametersRefresherFactory {
 
     create(context: ViewModelContext, notificationKey: string): IParametersRefresher {
         let key = ContextOperations.keyFor(context, notificationKey);
-        if (!this.cache[key])
-            this.cache[key] = new ParametersRefresher();
+        this.cache[key] = new ParametersRefresher();
         return this.cache[key];
     }
 
+    get(context: ViewModelContext, notificationKey: string): IParametersRefresher {
+        let key = ContextOperations.keyFor(context, notificationKey);
+        return this.cache[key];
+    }
 }

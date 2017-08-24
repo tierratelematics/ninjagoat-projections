@@ -24,7 +24,7 @@ describe("Given a refresh extender", () => {
             };
         });
         parametersFactory = Mock.ofType<IParametersRefresherFactory>();
-        parametersFactory.setup(p => p.create(It.isAny(), It.isAny())).returns(() => refresher.object);
+        parametersFactory.setup(p => p.get(It.isAny(), It.isAny())).returns(() => refresher.object);
         subject = new RefresherExtender(parametersFactory.object, registry.object);
     });
 

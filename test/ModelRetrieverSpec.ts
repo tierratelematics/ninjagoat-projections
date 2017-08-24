@@ -27,7 +27,7 @@ describe("Model retriever, given an area and a viewmodel id", () => {
         registry.setup(r => r.getEntry(It.isAny(), It.isAny())).returns(() => {
             return {
                 area: null,
-                viewmodel: new RegistryEntry(null, null, null)
+                viewmodel: null
             };
         });
         parametersFactory = Mock.ofType<IParametersRefresherFactory>();
@@ -137,16 +137,48 @@ describe("Model retriever, given an area and a viewmodel id", () => {
         });
 
         context("when a viewmodel does not exist for that model", () => {
-            it("should use the provided notify key", () => {
-                subject.modelFor(new ViewModelContext("Admin", "Foo", {id: "10"}), parameters => parameters.id).subscribe();
+            beforeEach(() => {
+                registry.reset();
+                registry.setup(r => r.getEntry(It.isAny(), It.isAny())).returns(() => {
+                    return {
+                        area: null,
+                        viewmodel: null
+                    };
+                });
+            });
+            context("when a notify key is provided", () => {
+                it("should use the provided notify key", () => {
+                    subject.modelFor(new ViewModelContext("Admin", "Foo", {id: "10"}), parameters => parameters.id).subscribe();
 
-                baseModelRetriever.verify(b => b.modelFor(It.isValue({
-                    area: "Admin",
-                    modelId: "Foo",
-                    parameters: {
-                        id: "10"
-                    }
-                }), "10"), Times.once());
+                    baseModelRetriever.verify(b => b.modelFor(It.isValue({
+                        area: "Admin",
+                        modelId: "Foo",
+                        parameters: {
+                            id: "10"
+                        }
+                    }), "10"), Times.once());
+                });
+            });
+
+            context("and a notify key is not provided", () => {
+                beforeEach(() => {
+                    parametersFactory.setup(p => p.create(It.isAny(), null)).returns(() => {
+                        let refresher = Mock.ofType<IParametersRefresher>();
+                        refresher.setup(r => r.updates()).returns(() => refreshes);
+                        return refresher.object;
+                    });
+                });
+                it("should not use a notify key", () => {
+                    subject.modelFor(new ViewModelContext("Admin", "Fake", {id: "10"})).subscribe();
+
+                    baseModelRetriever.verify(b => b.modelFor(It.isValue({
+                        area: "Admin",
+                        modelId: "Fake",
+                        parameters: {
+                            id: "10"
+                        }
+                    }), null), Times.once());
+                });
             });
         });
     });

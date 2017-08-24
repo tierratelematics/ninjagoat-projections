@@ -61,4 +61,5 @@ export interface IRefreshableModel {
 
 export interface IParametersRefresherFactory {
     create(context: ViewModelContext, notificationKey: string): IParametersRefresher;
+    get(context: ViewModelContext, notificationKey: string): IParametersRefresher;
 }

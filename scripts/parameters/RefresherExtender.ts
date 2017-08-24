@@ -15,7 +15,7 @@ class RefresherExtender implements IViewModelFactoryExtender {
         if ((<any>viewmodel).parametersRefresherReceived) {
             let entry = this.registry.getEntry(context.area, context.viewmodelId),
                 notifyKey = entry.viewmodel.notify ? entry.viewmodel.notify(context.parameters) : null,
-                parametersRefresher = this.factory.create(context, notifyKey);
+                parametersRefresher = this.factory.get(context, notifyKey);
             (<any>viewmodel).parametersRefresherReceived(parametersRefresher);
         }
     }

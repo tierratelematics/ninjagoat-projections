@@ -23,8 +23,8 @@ describe("Given a parameters refresher factory", () => {
             beforeEach(() => {
                 refresher = subject.create(new ViewModelContext("Admin", "Test"), "asset-1");
             });
-            it("should be picked from cache", () => {
-                expect(subject.create(new ViewModelContext("Admin", "Test"), "asset-1")).to.be(refresher);
+            it("should not cache the result", () => {
+                expect(subject.create(new ViewModelContext("Admin", "Test"), "asset-1")).not.to.be(refresher);
             });
         });
     });
