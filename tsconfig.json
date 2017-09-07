@@ -11,6 +11,7 @@
       "node",
       "reflect-metadata",
       "socket.io-client"
-    ]
+    ],
+    "declaration": true
   }
 }

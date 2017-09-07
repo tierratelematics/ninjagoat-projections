@@ -2,10 +2,11 @@ import {IModelRetriever as ChupacabrasModelRetriever} from "chupacabras";
 import {injectable, inject} from "inversify";
 import {Observable} from "rx";
 import ModelState from "./ModelState";
-import {ViewModelContext, IViewModelRegistry} from "ninjagoat";
+import {ViewModelContext, IViewModelRegistry, ObservableController} from "ninjagoat";
 import {IModelRetriever, NotifyKeyProvider} from "./IModelRetriever";
 import {IParametersRefresherFactory} from "../parameters/ParametersRefresherFactory";
 import {merge} from "lodash";
+import {ProjectionsController} from "./ProjectionsController";
 
 @injectable()
 class ModelRetriever implements IModelRetriever {
@@ -38,6 +39,35 @@ class ModelRetriever implements IModelRetriever {
                     .startWith(<ModelState<T>>ModelState.Loading());
             })
             .switch();
+    }
+
+    controllerFor<T>(context: ViewModelContext, notifyKeyProvider?: NotifyKeyProvider): ObservableController<ModelState<T>> {
+        let provider = this.getNotifyKeyProvider(context, notifyKeyProvider),
+            projectionsController = new ProjectionsController(),
+            mergedParameters = {};
+
+        let source = projectionsController.updates()
+            .startWith(context.parameters)
+            .map(newParameters => {
+                mergedParameters = merge({}, mergedParameters, newParameters);
+                let chupacabrasContext = {
+                        area: context.area,
+                        modelId: context.viewmodelId,
+                        parameters: mergedParameters
+                    },
+                    chupacabrasNotifyKey = provider(mergedParameters);
+
+                return this.modelRetriever.modelFor(chupacabrasContext, chupacabrasNotifyKey)
+                    .map(response => ModelState.Ready(<T>response))
+                    .catch(error => Observable.just(ModelState.Failed(error)))
+                    .startWith(<ModelState<T>>ModelState.Loading());
+            })
+            .switch();
+
+        return {
+            model: source,
+            refresh: projectionsController.refresh.bind(projectionsController)
+        };
     }
 
     private getNotifyKeyProvider(context: ViewModelContext, notifyKeyProvider?: NotifyKeyProvider): NotifyKeyProvider {
