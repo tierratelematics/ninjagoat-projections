@@ -1,7 +1,7 @@
 import {ViewModelContext, Dictionary} from "ninjagoat";
 import {IParametersRefresher, ParametersRefresher} from "./ParametersRefresher";
 import {injectable} from "inversify";
-import {ContextOperations} from "chupacabras";
+import ContextOperations from "../model/ContextOperations";
 
 export interface IParametersRefresherFactory {
     create(context: ViewModelContext, notificationKey: string): IParametersRefresher;
