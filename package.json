@@ -2,7 +2,7 @@
   "name": "ninjagoat-projections",
   "version": "3.0.0",
   "dependencies": {
-    "chupacabras": "^2.0.0-1",
+    "chupacabras": "^2.0.0",
     "inversify": "~3.0.0-rc.2",
     "lodash": "~4.10.0",
     "react": "^15.4.1",
