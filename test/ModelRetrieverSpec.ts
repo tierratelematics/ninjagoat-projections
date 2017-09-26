@@ -82,103 +82,56 @@ describe("Model retriever, given an area and a viewmodel id", () => {
             baseModelRetriever.setup(m => m.modelFor(It.isAny(), It.isAny())).returns(context => {
                 return Observable.just(context.parameters);
             });
-            registry.reset();
-            registry.setup(r => r.getEntry("Admin", "Bar")).returns(() => {
-                let entry = new RegistryEntry(null, null, null);
-                entry.notify = parameters => parameters.id;
-                return {
-                    area: null,
-                    viewmodel: entry
-                };
-            });
-            parametersFactory.reset();
-            parametersFactory.setup(p => p.create(It.isAny(), "10")).returns(() => {
-                let refresher = Mock.ofType<IParametersRefresher>();
-                refresher.setup(r => r.updates()).returns(() => refreshes);
-                return refresher.object;
-            });
         });
-        context("when a viewmodel exists for that model", () => {
-            it("should trigger a new request to prettygoat", () => {
-                subject.modelFor(new ViewModelContext("Admin", "Bar", {id: "10"})).subscribe();
-                refreshes.onNext({id: "20"});
+        it("should trigger a new request to prettygoat", () => {
+            let controller = subject.controllerFor(new ViewModelContext("Admin", "Bar", {id: "10"}));
+            controller.model.subscribe();
+            controller.refresh({id: "20"});
+
+            baseModelRetriever.verify(b => b.modelFor(It.isValue({
+                area: "Admin",
+                modelId: "Bar",
+                parameters: {
+                    id: "10"
+                }
+            }), null), Times.once());
+            baseModelRetriever.verify(b => b.modelFor(It.isValue({
+                area: "Admin",
+                modelId: "Bar",
+                parameters: {
+                    id: "20"
+                }
+            }), null), Times.once());
+        });
+
+        it("should merge the parameters with the previous ones", () => {
+            let controller = subject.controllerFor(new ViewModelContext("Admin", "Bar", {id: "10"}));
+            controller.model.subscribe();
+            controller.refresh({test: "20"});
+            controller.refresh({foo: "30"});
+
+            baseModelRetriever.verify(b => b.modelFor(It.isValue({
+                area: "Admin",
+                modelId: "Bar",
+                parameters: {
+                    id: "10",
+                    test: "20",
+                    foo: "30"
+                }
+            }), null), Times.once());
+        });
+
+        context("when a notify key is provided", () => {
+            it("should use the provided notify key", () => {
+                subject.controllerFor(new ViewModelContext("Admin", "Foo", {id: "10"}), parameters => parameters.id).model.subscribe();
 
                 baseModelRetriever.verify(b => b.modelFor(It.isValue({
                     area: "Admin",
-                    modelId: "Bar",
+                    modelId: "Foo",
                     parameters: {
                         id: "10"
                     }
                 }), "10"), Times.once());
-                baseModelRetriever.verify(b => b.modelFor(It.isValue({
-                    area: "Admin",
-                    modelId: "Bar",
-                    parameters: {
-                        id: "20"
-                    }
-                }), "20"), Times.once());
-            });
-
-            it("should merge the parameters with the previous ones", () => {
-                subject.modelFor(new ViewModelContext("Admin", "Bar", {id: "10"})).subscribe();
-                refreshes.onNext({test: "20"});
-                refreshes.onNext({foo: "30"});
-
-                baseModelRetriever.verify(b => b.modelFor(It.isValue({
-                    area: "Admin",
-                    modelId: "Bar",
-                    parameters: {
-                        id: "10",
-                        test: "20",
-                        foo: "30"
-                    }
-                }), "10"), Times.once());
-            });
-        });
-
-        context("when a viewmodel does not exist for that model", () => {
-            beforeEach(() => {
-                registry.reset();
-                registry.setup(r => r.getEntry(It.isAny(), It.isAny())).returns(() => {
-                    return {
-                        area: null,
-                        viewmodel: null
-                    };
-                });
-            });
-            context("when a notify key is provided", () => {
-                it("should use the provided notify key", () => {
-                    subject.modelFor(new ViewModelContext("Admin", "Foo", {id: "10"}), parameters => parameters.id).subscribe();
-
-                    baseModelRetriever.verify(b => b.modelFor(It.isValue({
-                        area: "Admin",
-                        modelId: "Foo",
-                        parameters: {
-                            id: "10"
-                        }
-                    }), "10"), Times.once());
-                });
-            });
-
-            context("and a notify key is not provided", () => {
-                beforeEach(() => {
-                    parametersFactory.setup(p => p.create(It.isAny(), null)).returns(() => {
-                        let refresher = Mock.ofType<IParametersRefresher>();
-                        refresher.setup(r => r.updates()).returns(() => refreshes);
-                        return refresher.object;
-                    });
-                });
-                it("should not use a notify key", () => {
-                    subject.modelFor(new ViewModelContext("Admin", "Fake", {id: "10"})).subscribe();
-
-                    baseModelRetriever.verify(b => b.modelFor(It.isValue({
-                        area: "Admin",
-                        modelId: "Fake",
-                        parameters: {
-                            id: "10"
-                        }
-                    }), null), Times.once());
-                });
             });
         });
     });

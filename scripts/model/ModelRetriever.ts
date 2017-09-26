@@ -42,7 +42,8 @@ class ModelRetriever implements IModelRetriever {
     }
 
     controllerFor<T>(context: ViewModelContext, notifyKeyProvider?: NotifyKeyProvider): ObservableController<ModelState<T>> {
-        let provider = this.getNotifyKeyProvider(context, notifyKeyProvider),
+        let emptyKeyProvider = () => null,
+            provider = notifyKeyProvider || emptyKeyProvider,
             projectionsController = new ProjectionsController(),
             mergedParameters = {};
 
