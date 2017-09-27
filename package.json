@@ -1,6 +1,6 @@
 {
   "name": "ninjagoat-projections",
-  "version": "3.1.0",
+  "version": "3.1.1",
   "dependencies": {
     "chupacabras": "^2.0.0",
     "inversify": "~3.0.0-rc.2",
