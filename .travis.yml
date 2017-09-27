@@ -4,7 +4,7 @@ node_js:
 install:
   - npm install smild@4.8.1 -g
   - npm install
-  - npm install ninjagoat@2.x
+  - npm install ninjagoat@2.6.0
 script: smild test && smild build
 deploy:
   skip_cleanup: true
