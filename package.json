@@ -22,11 +22,11 @@
     "typemoq": "~1.1.0"
   },
   "peerDependencies": {
-    "ninjagoat": "^2.5.0"
+    "ninjagoat": "^2.6.0"
   },
   "scripts": {
     "test": "smild test"
   },
-  "main": "dist/ninjagoat-projections.js",
-  "typings": "declarations/ninjagoat-projections.d.ts"
+  "main": "dist",
+  "typings": "dist"
 }
