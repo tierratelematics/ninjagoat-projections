@@ -1,3 +1,7 @@
+# 3.1.1
+
+Optional controllerFor method
+
 # 3.1.0
 
 Uniform parameters management with ObservableController
