@@ -1,8 +1,8 @@
 {
   "name": "ninjagoat-projections",
-  "version": "3.0.0",
+  "version": "3.1.0",
   "dependencies": {
-    "chupacabras": "^2.0.0-1",
+    "chupacabras": "^2.0.0",
     "inversify": "~3.0.0-rc.2",
     "lodash": "~4.10.0",
     "react": "^15.4.1",
@@ -22,11 +22,11 @@
     "typemoq": "~1.1.0"
   },
   "peerDependencies": {
-    "ninjagoat": "^2.5.0"
+    "ninjagoat": "^2.6.0"
   },
   "scripts": {
     "test": "smild test"
   },
-  "main": "dist/ninjagoat-projections.js",
-  "typings": "declarations/ninjagoat-projections.d.ts"
+  "main": "dist",
+  "typings": "dist"
 }
