@@ -1,3 +1,7 @@
+# 3.1.0
+
+Uniform parameters management with ObservableController
+
 # 3.0.0
 
 * Bump to prettygoat 4
