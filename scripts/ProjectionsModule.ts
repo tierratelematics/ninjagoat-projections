@@ -20,7 +20,7 @@ class ProjectionsModule implements IModule {
 
     modules = (container: interfaces.Container) => {
         container.bind<IModelRetriever>("IModelRetriever").to(ModelRetriever).inSingletonScope();
-        container.bind<IModelRetriever>("ModelRetriever").toDynamicValue(() => {
+        container.bind("ModelRetriever").toDynamicValue(() => {
             let notificationManager = container.get<INotificationManager>("INotificationManager");
             let httpClient = container.get<IHttpClient>("IHttpClient");
             return new ChupacabrasModelRetriever(httpClient, notificationManager);

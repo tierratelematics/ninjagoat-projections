@@ -7,9 +7,13 @@ import {IModelRetriever, NotifyKeyProvider} from "./IModelRetriever";
 import {IParametersRefresherFactory} from "../parameters/ParametersRefresherFactory";
 import {merge} from "lodash";
 import {ProjectionsController} from "./ProjectionsController";
+import {ILogger, NullLogger, LoggingContext} from "ninjagoat";
 
 @injectable()
+@LoggingContext("ModelRetriever")
 class ModelRetriever implements IModelRetriever {
+
+    @inject("ILogger") private logger: ILogger = NullLogger;
 
     constructor(@inject("ModelRetriever") private modelRetriever: ChupacabrasModelRetriever,
                 @inject("IParametersRefresherFactory") private factory: IParametersRefresherFactory,
@@ -32,7 +36,6 @@ class ModelRetriever implements IModelRetriever {
                         parameters: mergedParameters
                     },
                     chupacabrasNotifyKey = provider(mergedParameters);
-
                 return this.modelRetriever.modelFor(chupacabrasContext, chupacabrasNotifyKey)
                     .map(response => ModelState.Ready(<T>response))
                     .catch(error => Observable.just(ModelState.Failed(error)))
@@ -45,7 +48,8 @@ class ModelRetriever implements IModelRetriever {
         let emptyKeyProvider = () => null,
             provider = notifyKeyProvider || emptyKeyProvider,
             projectionsController = new ProjectionsController(),
-            mergedParameters = {};
+            mergedParameters = {},
+            logger = this.logger.createChildLogger(context.area).createChildLogger(context.viewmodelId);
 
         let source = projectionsController.updates()
             .startWith(context.parameters)
@@ -57,6 +61,8 @@ class ModelRetriever implements IModelRetriever {
                         parameters: mergedParameters
                     },
                     chupacabrasNotifyKey = provider(mergedParameters);
+
+                logger.debug(`Loading new data with context ${JSON.stringify(chupacabrasContext)} and notify key ${chupacabrasNotifyKey}`);
 
                 return this.modelRetriever.modelFor(chupacabrasContext, chupacabrasNotifyKey)
                     .map(response => ModelState.Ready(<T>response))
