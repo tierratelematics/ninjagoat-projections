@@ -10,8 +10,7 @@ import {ProjectionsController} from "./ProjectionsController";
 import {ILogger, NullLogger, LoggingContext} from "ninjagoat";
 
 @injectable()
-@LoggingContext("ModelRetriever");
-
+@LoggingContext("ModelRetriever")
 class ModelRetriever implements IModelRetriever {
 
     @inject("ILogger") private logger: ILogger = NullLogger;
