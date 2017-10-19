@@ -1,3 +1,7 @@
+# 3.2.0
+
+Add some logs
+
 # 3.1.1
 
 Optional controllerFor method
