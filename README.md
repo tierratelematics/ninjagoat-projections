@@ -36,10 +36,10 @@ This service returns an Observable of type ModelState<T>, where ModelState is a 
 let modelRetriever = serviceLocator.get<IModelRetriever>("IModelRetriever");
 
 //To access the data of a projection named List registered in a Users area
-let source = modelRetriever.modelFor({
+let source = modelRetriever.controllerFor({
     area: "Users",
     viewmodelId: "List"
-});
+}).model;
 ```
 
 ## License

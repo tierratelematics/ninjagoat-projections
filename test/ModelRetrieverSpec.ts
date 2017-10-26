@@ -5,39 +5,20 @@ import {IModelRetriever as ChupacabrasModelRetriever} from "chupacabras";
 import ModelRetriever from "../scripts/model/ModelRetriever";
 import ModelState from "../scripts/model/ModelState";
 import TestCounter from "./fixtures/TestCounter";
-import {ViewModelContext, IViewModelRegistry, RegistryEntry} from "ninjagoat";
+import {ViewModelContext} from "ninjagoat";
 import ModelPhase from "../scripts/model/ModelPhase";
 import {IModelRetriever} from "../scripts/model/IModelRetriever";
-import {Observable, Subject} from "rx";
-import {IParametersRefresherFactory} from "../scripts/parameters/ParametersRefresherFactory";
-import {IParametersRefresher} from "../scripts/parameters/ParametersRefresher";
+import {Observable} from "rx";
 
 describe("Model retriever, given an area and a viewmodel id", () => {
 
     let subject: IModelRetriever;
     let baseModelRetriever: IMock<ChupacabrasModelRetriever>;
     let modelContext = new ViewModelContext("Admin", "Bar");
-    let registry: IMock<IViewModelRegistry>;
-    let parametersFactory: IMock<IParametersRefresherFactory>;
-    let refreshes: Subject<object>;
 
     beforeEach(() => {
-        refreshes = new Subject<object>();
-        registry = Mock.ofType<IViewModelRegistry>();
-        registry.setup(r => r.getEntry(It.isAny(), It.isAny())).returns(() => {
-            return {
-                area: null,
-                viewmodel: null
-            };
-        });
-        parametersFactory = Mock.ofType<IParametersRefresherFactory>();
-        parametersFactory.setup(p => p.create(It.isAny(), It.isAny())).returns(() => {
-            let refresher = Mock.ofType<IParametersRefresher>();
-            refresher.setup(r => r.updates()).returns(() => refreshes);
-            return refresher.object;
-        });
         baseModelRetriever = Mock.ofType<ChupacabrasModelRetriever>();
-        subject = new ModelRetriever(baseModelRetriever.object, parametersFactory.object, registry.object);
+        subject = new ModelRetriever(baseModelRetriever.object);
     });
 
     context("when a viewmodel needs data to be loaded", () => {
@@ -46,7 +27,7 @@ describe("Model retriever, given an area and a viewmodel id", () => {
         }));
         it("should send a loading state to the viewmodel", () => {
             let modelState: ModelState<TestCounter> = null;
-            subject.modelFor<TestCounter>(modelContext).take(1).subscribe(item => modelState = item);
+            subject.controllerFor<TestCounter>(modelContext).model.take(1).subscribe(item => modelState = item);
 
             expect(modelState.phase).to.be(ModelPhase.Loading);
         });
@@ -58,7 +39,7 @@ describe("Model retriever, given an area and a viewmodel id", () => {
         }));
         it("should load the data", () => {
             let modelState: ModelState<TestCounter> = null;
-            subject.modelFor<TestCounter>(modelContext).skip(1).take(1).subscribe(item => modelState = item);
+            subject.controllerFor<TestCounter>(modelContext).model.skip(1).take(1).subscribe(item => modelState = item);
 
             expect(modelState.model.count).to.be(20);
         });
@@ -71,7 +52,7 @@ describe("Model retriever, given an area and a viewmodel id", () => {
 
         it("should push a failed state to the viewmodel", () => {
             let modelState: ModelState<TestCounter> = null;
-            subject.modelFor<TestCounter>(modelContext).skip(1).take(1).subscribe(item => modelState = item);
+            subject.controllerFor<TestCounter>(modelContext).model.skip(1).take(1).subscribe(item => modelState = item);
 
             expect(modelState.failure).to.eql({message: "Something bad happened"});
         });
