@@ -11,7 +11,8 @@
       "node",
       "reflect-metadata",
       "socket.io-client"
-    ]
+    ],
+    "skipLibCheck": true
   },
   "include": [
     "node_modules/rx/ts/rx.all.d.ts"
