@@ -1,3 +1,7 @@
+# 4.0.0
+
+Support only the controller version of ModelRetriever
+
 # 3.2.0
 
 Add some logs
