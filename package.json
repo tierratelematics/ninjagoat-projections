@@ -1,6 +1,6 @@
 {
   "name": "ninjagoat-projections",
-  "version": "3.2.0",
+  "version": "4.0.0",
   "dependencies": {
     "chupacabras": "^2.0.0",
     "inversify": "^4.3.0",
@@ -22,7 +22,7 @@
     "typemoq": "~1.1.0"
   },
   "peerDependencies": {
-    "ninjagoat": "^2.8.0"
+    "ninjagoat": "^3.0.0"
   },
   "scripts": {
     "test": "smild test"
