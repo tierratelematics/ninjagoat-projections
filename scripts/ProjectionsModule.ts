@@ -7,14 +7,11 @@ import {
 import ModelRetriever from "./model/ModelRetriever";
 import {interfaces} from "inversify";
 import {IModule} from "ninjagoat";
-import {IViewModelRegistry, Dictionary} from "ninjagoat";
-import {IServiceLocator, IViewModelFactoryExtender} from "ninjagoat";
+import {IViewModelRegistry} from "ninjagoat";
+import {IServiceLocator} from "ninjagoat";
 import * as io from "socket.io-client";
 import ISocketConfig from "./ISocketConfig";
 import {IModelRetriever} from "./model/IModelRetriever";
-import RefresherExtender from "./parameters/RefresherExtender";
-import {IParametersRefresher} from "./parameters/ParametersRefresher";
-import {IParametersRefresherFactory, ParametersRefresherFactory} from "./parameters/ParametersRefresherFactory";
 
 class ProjectionsModule implements IModule {
 
@@ -36,8 +33,6 @@ class ProjectionsModule implements IModule {
                 transports: config.transports || ["websocket"]
             });
         });
-        container.bind<IParametersRefresherFactory>("IParametersRefresherFactory").to(ParametersRefresherFactory).inSingletonScope();
-        container.bind<IViewModelFactoryExtender>("IViewModelFactoryExtender").to(RefresherExtender).inSingletonScope();
     };
 
     register(registry: IViewModelRegistry, serviceLocator?: IServiceLocator, overrides?: any): void {
