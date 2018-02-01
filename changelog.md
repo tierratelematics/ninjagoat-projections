@@ -1,3 +1,7 @@
+# 4.1.0
+
+Export ProjectionsController
+
 # 4.0.0
 
 Support only the controller version of ModelRetriever
