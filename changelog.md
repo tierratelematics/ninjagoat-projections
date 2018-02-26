@@ -1,3 +1,7 @@
+# 5.0.0
+
+Update React to v16
+
 # 4.1.0
 
 Export ProjectionsController
