@@ -1,10 +1,10 @@
 {
   "name": "ninjagoat-projections",
-  "version": "5.0.0",
+  "version": "5.0.1",
   "dependencies": {
     "chupacabras": "^2.0.0",
     "inversify": "^4.3.0",
-    "lodash": "~4.10.0",
+    "lodash": "^4.17.5",
     "react": "^16.2.0",
     "react-dom": "^16.2.0",
     "reflect-metadata": "0.1.8",
